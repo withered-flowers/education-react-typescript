@@ -2,11 +2,13 @@
 
 ## Table of Content
 
-- Disclaimer & Prerequisites
-- Introduction
-- What is TypeScript
-- Why TypeScript
-- Starting React with TypeScript
+- [Disclaimer & Prerequisites](#disclaimer--prerequisites)
+- [Introduction](#introduction)
+- [What is TypeScript](#what-is-typescript)
+- [Why TypeScript](#why-typescript)
+- [Starting React with TypeScript](#starting-react-with-typescript)
+  - [Langkah 1 - Inisialisasi Project](#langkah-1---inisialisasi-project)
+  - [Langkah 2 - Duo Counter](#langkah-2---duo-counter)
 
 ## Disclaimer & Prerequisites
 
@@ -92,6 +94,8 @@ Pada pembelajaran ini kita akan menggunakan cara yang **kedua**, yaitu menggunak
 
 Mari kita mulai !
 
+### Langkah 1 - Inisialisasi Project
+
 Langkah-langkah untuk memulainya adalah sebagai berikut:
 
 1. Buka terminal dan pindah ke folder workspaces yang dimiliki
@@ -112,3 +116,91 @@ Langkah-langkah untuk memulainya adalah sebagai berikut:
    - [yarn] `yarn run dev`
    - [pnpm] `pnpm run dev`
 1. Kemudian kita akan membuka browser kita pada `http://localhost:5173`, default port development pada `vite`
+1. `Yay` ! aplikasi pertama kita menggunakan React versi TS sudah bisa berjalan dengan baik !
+
+Mari kita coba lihat apa perbedaannya bila menggunakan versi JS dengan versi TS:
+
+- `package.json` yang memiliki dependency tambahan untuk bisa menghandle react versi typescript
+- `tsconfig.json` dan `tsconfig.node.json`, merupakan konfigurasi untuk TS untuk `Browser` dan `NodeJS`
+- Pada folder `/src` akan ada file yang berbeda penamaannya dengan versi JS:
+
+  - `App.jsx` (JS) akan berubah menjadi `App.tsx` (TS). Hal ini untuk memberitahukan Vite bahwa kita akan menggunakan TypeScript pada JSX yang ada. Bila dilihat di dalam sini, tidak ada perbedaan kode awal dari versi JS.
+  - `main.jsx` (JS) akan berubah menjadi `main.tsx` (TS), dan ada sedikit perubahan kode:
+
+    ```ts
+    // Dalam kode ini menyatakan bahwa deklarasikan document.getElementById
+    // adalah suatu tipe data yang bernama HTMLElement
+
+    // HTMLElement adalah tipe data bawaan untuk element yang ada pada browser
+
+    // https://www.typescriptlang.org/docs/handbook/dom-manipulation.html
+    document.getElementById("root") as HTMLElement;
+    ```
+
+Sampai pada titik ini artinya pembelajaran tentang inisialisasi React versi TypeScript sudah selesai. sekarang saatnya kita belajar untuk menggunakan TypeScript versi React yah !
+
+### Langkah 2 - Duo Counter
+
+Pada langkah ini kita akan coba untuk membuat dua buah counter yang keduanya berasal dari state yang sama: `duoCounter`, yang merupakan suatu object yang memiliki 2 props:
+
+- `firstCounter` untuk angka pertama
+- `secondCounter` untuk angka kedua
+
+Pada halaman utama ini juga akan ada:
+
+- sebuah button yang berfungsi untuk melakukan increment terhadap `firstCounter` sebanyak 1
+- sebuah input yang akan menerima `amount` untuk menambahkan `secondCounter`
+- sebuah button yang akan menambahkan `secondCounter` sejumlah `amount` yang ada pada input
+
+Mari kita coba untuk membuat ini dalam versi TypeScript yah !
+
+```
+Disclaimer:
+
+- Cara orang membuat TypeScript bisa jadi berbeda-beda, jadi bila Anda sudah ada di tingkat lanjut (Advanced), mungkin cara ini BUKAN CARA YANG TERBAIK YAH !
+```
+
+Langkah-langkah untuk membuat bagian ini adalah sebagai berikut:
+
+1. Buka file `index.html` dan ganti isi dari title menjadi `Belajar React versi TypeScript`
+1. Buka file `/src/main.tsx` dan comment / hapus `import './index.css'`
+1. Buka file `/src/App.tsx` dan hapus seluruh code yang ada, karena kita akan mencoba membuatnya dari awal
+1. Menuliskan kembali kerangka awal untuk `App.tsx` sebagai berikut:
+
+   ```ts
+   const App = () => {
+     return <></>;
+   };
+
+   export default App;
+   ```
+
+1. Kemudian kita akan import useState dari react dan menuliskan state awal untuk `duoCounter` dalam versi typescript sebagai berikut:
+
+   ```ts
+   import { useState } from "react";
+
+   // Di sini kita akan mendeclare tipe dari duoCounter
+   // sebut saja namanya adalah DuoCounter
+   type DuoCounter = {
+     firstCounter: number;
+     secondCounter: number;
+   };
+
+   const App = () => {
+     // Di sini kita akan mendeclare useState dan menggunakan
+     // tipe data DuoCounter yang sudah dideclare sebelumnya
+     const [duoCounter, setDuoCounter] = useState<DuoCounter>({
+       // Wajib memiliki "data" yang sudah dideklarasikan di dalam
+       // type DuoCounter, tidak boleh lebih / kurang
+
+       // TODO: Cobalah untuk menambahkan thirdCounter di sini, dan lihat apakah hasilnya?
+       firstCounter: 0,
+       secondCounter: 0,
+     });
+
+     return <></>;
+   };
+
+   export default App;
+   ```
