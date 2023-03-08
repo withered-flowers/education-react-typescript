@@ -1,4 +1,4 @@
-import { ChangeEvent, SyntheticEvent, useState } from "react";
+import { ChangeEvent, useState } from "react";
 
 // Di sini kita akan mendeclare tipe dari duoCounter
 // sebut saja namanya adalah DuoCounter
