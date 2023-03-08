@@ -204,3 +204,92 @@ Langkah-langkah untuk membuat bagian ini adalah sebagai berikut:
 
    export default App;
    ```
+
+1. Selanjutnya kita akan menuliskan tampilan yang akan digunakan dalam Bagian ini, yaitu:
+
+   - dua buah paragraph untuk melihat isi dari `firstCounter` dan `secondCounter`
+   - sebuah button untuk menambahkan `firstCounter`
+   - sebuah input untuk menyimpan `amount` yang digunakan untuk menambah `secondCounter`
+   - sebuah button untuk menambahkan `secondCounter` berdasarkan `amount` yang ada
+
+1. Untuk mengerjakan point di atas, kita akan memodifikasi kode `/src/App.tsx` menjadi seperti berikut:
+
+   ```ts
+   // sama dengan sebelumnya
+
+   const App = () => {
+     // Sama dengan sebelumnya
+
+     // Mulai modifikasi dari sini
+     return (
+       <>
+         <section className="Duo Counter">
+           <p>Value dari firstCounter adalah: {duoCounter.firstCounter}</p>
+           <p>Value dari secondCounter adalah: {duoCounter.secondCounter}</p>
+
+           <div style={{ marginBottom: "1em" }}>
+             <button>Tambah (firstCounter)</button>
+           </div>
+
+           <div>
+             <input
+               style={{ marginRight: "1em" }}
+               type="number"
+               placeholder="Amount"
+             />
+             <button>Tambah (secondCounter)</button>
+           </div>
+         </section>
+       </>
+     );
+   };
+   ```
+
+1. Selanjutnya kita akan memulai untuk menggunakan event handling ala react untuk menambahkan`firstCounter` pada saat button `Tambah (firstCounter)` ditekan. Perubahan kode pada `/src/App.tsx` nya adalah sebagai berikut:
+
+   ```ts
+   // sama dengan sebelumnya
+
+   const App = () => {
+     // sama dengan sebelumnya
+
+     // Tambahkan ini sebelum return
+     // TODO: duoCounter - Tambah firstCounter (1)
+     // Tambahkan kode di sini untuk menambahkan firstCounter
+     const buttonFirstIncrementOnClickHandler = () => {
+       // Karena state dianggap "immutable"
+
+       // Maka kita akan membuat object yang baru yang isinya sama dengan
+       // duoCounter sebelumnya, namun firstCounternya akan berubah + 1
+       setDuoCounter({
+         ...duoCounter,
+         firstCounter: duoCounter.firstCounter + 1,
+       });
+     };
+
+     return (
+       <>
+         <section className="Duo Counter">
+           <p>Value dari firstCounter adalah: {duoCounter.firstCounter}</p>
+           <p>Value dari secondCounter adalah: {duoCounter.secondCounter}</p>
+
+           <div style={{ marginBottom: "1em" }}>
+             {/* TODO: duoCounter - Tambah firstCounter (2) */}
+             {/* Tambahkan kode di sini untuk menambahkan firstCounter */}
+             <button onClick={buttonFirstIncrementOnClickHandler}>
+               Tambah (firstCounter)
+             </button>
+           </div>
+
+           {/* Selebihnya ke bawah ini masih sama */}
+         </section>
+       </>
+     );
+   };
+   ```
+
+1. Dari kode yang ada di sini, terlihat bahwa sebenarnya tidak ada perubahan kode yang signifikan apabila kita menggunakan baik JS maupun TS dalam menuliskan kodenya.
+
+   Selanjutnya Kita akan coba melihat untuk yang menggunakan input `amount` dan button `Tambah (secondCounter)` nya, apakah masih sama saja?
+
+1.
