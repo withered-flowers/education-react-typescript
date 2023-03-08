@@ -34,6 +34,7 @@ const App = () => {
 
   // TODO: duoCounter - Tambah secondCounter (1)
   // Tambahkan kode di sini untuk menambahkan secondCounter
+  // Perhatikan pada bagian ini useState nya menerima tipe data number saja
   const [amount, setAmount] = useState<number>(0);
 
   // TODO: duoCounter - Tambah secondCounter (2)
@@ -75,6 +76,7 @@ const App = () => {
 
   // TODO: duoCounter - Tambah secondCounter (3)
   // Tambahkan kode di sini untuk menambahkan secondCounter
+  // Tidak ada logic yang berbeda dengan yang sebelumnya
   const buttonSecondIncrementOnClickHandler = () => {
     setDuoCounter({
       ...duoCounter,
@@ -99,6 +101,7 @@ const App = () => {
         <div>
           {/* TODO: duoCounter - Tambah secondCounter (4) */}
           {/* Tambahkan kode di sini untuk menambahkan secondCounter */}
+          {/* Tidak ada yang berbeda dengan versi javascript */}
           <input
             style={{ marginRight: "1em" }}
             type="number"
@@ -109,6 +112,7 @@ const App = () => {
 
           {/* TODO: duoCounter - Tambah secondCounter (5) */}
           {/* Tambahkan kode di sini untuk menambahkan secondCounter */}
+          {/* Tidak ada yang berbeda dengan versi javascript */}
           <button onClick={buttonSecondIncrementOnClickHandler}>
             Tambah (secondCounter)
           </button>
