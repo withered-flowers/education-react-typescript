@@ -9,6 +9,7 @@
 - [Starting React with TypeScript](#starting-react-with-typescript)
   - [Langkah 1 - Inisialisasi Project](#langkah-1---inisialisasi-project)
   - [Langkah 2 - Duo Counter](#langkah-2---duo-counter)
+  - [Langkah 3 - Pseudo Router](#langkah-3---pseudo-router)
 
 ## Disclaimer & Prerequisites
 
@@ -520,4 +521,186 @@ Langkah-langkah untuk membuat bagian ini adalah sebagai berikut:
    };
 
    export default App;
+   ```
+
+## Langkah 3 - Pseudo Router
+
+Pada langkah ini kita akan mencoba untuk membuat "Navigasi" secara manual, tanpa menggunakan routing, yang bisa mengarahkan pada 3 halaman:
+
+- Halaman Counter
+- Halaman Form
+- Halaman Table
+
+Halaman Counter merupakan Halaman yang kita buat pada langkah sebelumnya yang menempel pada halaman `App.tsx`
+
+Halaman Form dan Halaman Table, adalah halaman dalam bentuk 2 buah Component baru dengan nama `FormPage.tsx` dan `TablePage.tsx` yang hanya akan menampilkan tulisan `Ini adalah halaman Form` dan `Ini adalah halaman Table`
+
+"Navigasi" ini akan dibuat dalam bentuk sebuah `Navigation Bar`, dalam sebuah Component yang bernama `NavBar.tsx`
+
+Requirementnya adalah:
+
+- State untuk menampung `current page` ada pada `App.tsx`
+- Pengubah Statenya terdapat di dalam `NavBar.tsx`
+
+Berikut adalah langkah langkahnya:
+
+1. Buat dua buah file baru dengan nama `/src/pages/FormPage.tsx` dan `/src/pages/TablePage.tsx`, kemudian isilah keduanya dengan kode sebagai berikut:
+
+   ```ts
+   // File: /src/pages/FormPage.tsx
+   const FormPage = () => {
+     return (
+       <>
+         <p>Ini adalah halaman Form</p>
+       </>
+     );
+   };
+
+   export default FormPage;
+   ```
+
+   ```ts
+   // File: /src/pages/TablePage.tsx
+   const TablePage = () => {
+     return (
+       <>
+         <p>Ini adalah halaman Table</p>
+       </>
+     );
+   };
+
+   export default TablePage;
+   ```
+
+1. Selanjutnya kita akan membuat halaman dasar untuk Navigation Barnya, adapun kode yang harus dituliskan pada file `/src/components/NavBar.tsx` adalah sebagai berikut:
+
+   ```ts
+   // File: /src/components/NavBar.tsx
+   const NavBar = () => {
+     return (
+       <>
+         <nav>
+           <ul
+             style={{
+               display: "flex",
+               flexDirection: "row",
+               gap: "1em",
+               listStyle: "none",
+               paddingLeft: "0",
+             }}
+           >
+             <li>
+               <a href="#">Counter</a>
+             </li>
+             <li>
+               <a href="#">Form</a>
+             </li>
+             <li>
+               <a href="#">Table</a>
+             </li>
+           </ul>
+         </nav>
+       </>
+     );
+   };
+
+   export default NavBar;
+   ```
+
+1. Lalu kita akan memanggil `NavBar.tsx` pada `App.tsx`. Dengan asumsi bahwa teman-teman sudah mengerti React maka kode yang harus dituliskan hanyalah beberapa baris ini saja:
+
+   ```ts
+   // File: App.tsx
+   // TODO: PseudoRouter - tambah NavBar (1)
+   import NavBar from "./components/NavBar";
+   import FormPage from "./pages/FormPage";
+   import TablePage from "./pages/TablePage";
+
+   // sama dengan sebelumnya
+   const App = () => {
+     // sama dengan sebelumnya
+
+     return (
+       <>
+         {/* TODO: PseudoRouter - tambah NavBar (2) */}
+         <NavBar />
+
+         {/* Selebihnya sama dengan sebelumnya */}
+
+         {/* Panggil 2 Page ini sebelum tutup Fragment */}
+         <FormPage />
+         <TablePage />
+       </>
+     );
+   };
+   ```
+
+1. Selanjutnya kita akan membuat "constant" yang akan menahan beberapa "nama" dari halaman yang ada. Kita membutuhkan "constant" ini karena kita akan menggunakannya nanti pada beberapa tempat (`App.tsx` dan `NavBar.tsx`).
+
+   Nama Halaman yang akan kita gunakan adalah:
+
+   - `COUNTER_PAGE` untuk halaman **Counter**
+   - `FORM_PAGE` untuk halaman **Form**
+   - `TABLE_PAGE` untuk halaman **Table**
+
+1. Untuk itu kita akan membuat sebuah file untuk menahan "constant" tersebut dengan nama `/src/config/constant.ts`, pada TypeScript kita bisa menahan "constant" dengan menggunakan `enum(erations)` (https://www.typescriptlang.org/docs/handbook/enums.html). Kodenya adalah sebagai berikut:
+
+   ```ts
+   // File: /src/config/contsant.ts
+   // Pada file ini kita langsung export saja tanpa menggunakan default
+   export enum PageName {
+     // Secara default apabila tidak menggunakan nama alias pada enum
+     // adalah akses by value index
+
+     COUNTER_PAGE, // valuenya adalah 0
+     FORM_PAGE, // valuenya adalah 1
+     TABLE_PAGE, // valuenya adalah 2
+
+     // Namun karena kita menggunakan enum, kita tidak mempedulikan valuenya
+     // Kita akan mempedulikan "nama alias"-nya !
+   }
+   ```
+
+1. Selanjutnya kita akan mencoba untuk menggunakan `enum` ini pada `App.tsx`. Adapun modifikasi kodenya adalah sebagai berikut:
+
+   ```ts
+   // Tambahkan di import terbawah
+   // TODO: PseudoRouter - menggunakan Enum (1)
+   // Tambahkan kode di sini untuk menggunakan enum
+   import { PageName } from "./config/constant";
+
+   // -- sama seperti sebelumnya --
+   const App = () => {
+     // Tambahkan sebelum return
+
+     // TODO: PseudoRouter - menggunakan Enum (2)
+     // Tambahkan kode di sini untuk menggunakan enum
+     // Perhatikan di sini useState-nya menggunakan tipe data enum yang dibuat (PageName)
+     const [currentPage, setCurrentPage] = useState<PageName>(
+       // Set default valuenya mengarah pada halaman Counter
+       PageName.COUNTER_PAGE
+     );
+
+     return (
+       <>
+         {/* Sama seperti sebelumnya */}
+
+         {/* Pada bagian section Duo Counter kita akan menambahkan */}
+         {/* Conditional Rendering */}
+
+         {/* TODO: PseudoRouter - menggunakan Enum (3) */}
+         {/* Tambahkan kode di sini untuk menggunakan enum */}
+         {/* Di sini menggunakan normal conditional rendering */}
+         {/* Hanya saja kondisinya menggunakan enum ! */}
+         {currentPage === PageName.COUNTER_PAGE && (
+           <section className="Duo Counter">...</section>
+         )}
+
+         {/* TODO: PseudoRouter - menggunakan Enum (4) */}
+         {/* Tambahkan kode di sini untuk menggunakan enum */}
+         {currentPage === PageName.FORM_PAGE && <FormPage />}
+         {currentPage === PageName.TABLE_PAGE && <TablePage />}
+       </>
+     );
+   };
    ```
