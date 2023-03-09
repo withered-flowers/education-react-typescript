@@ -1,4 +1,11 @@
 import { ChangeEvent, useState } from "react";
+// TODO: PseudoRouter - tambah NavBar (1)
+import NavBar from "./components/NavBar";
+import FormPage from "./pages/FormPage";
+import TablePage from "./pages/TablePage";
+// TODO: PseudoRouter - menggunakan Enum (1)
+// Tambahkan kode di sini untuk menggunakan enum
+import { PageName } from "./config/constant";
 
 // Di sini kita akan mendeclare tipe dari duoCounter
 // sebut saja namanya adalah DuoCounter
@@ -84,40 +91,62 @@ const App = () => {
     });
   };
 
+  // TODO: PseudoRouter - menggunakan Enum (2)
+  // Tambahkan kode di sini untuk menggunakan enum
+  // Perhatikan di sini useState-nya menggunakan tipe data enum yang dibuat (PageName)
+  const [currentPage, setCurrentPage] = useState<PageName>(
+    // Set default valuenya mengarah pada halaman Counter
+    PageName.COUNTER_PAGE
+  );
+
   return (
     <>
-      <section className="Duo Counter">
-        <p>Value dari firstCounter adalah: {duoCounter.firstCounter}</p>
-        <p>Value dari secondCounter adalah: {duoCounter.secondCounter}</p>
+      {/* TODO: PseudoRouter - tambah NavBar (2) */}
+      {/* TODO: PseudoRouter - tambah fnHandler (1) */}
+      <NavBar fnHandler={setCurrentPage} />
+      {/* TODO: PseudoRouter - menggunakan Enum (3) */}
+      {/* Tambahkan kode di sini untuk menggunakan enum */}
+      {/* Di sini menggunakan normal conditional rendering */}
+      {/* Hanya saja kondisinya menggunakan enum ! */}
+      {currentPage === PageName.COUNTER_PAGE && (
+        <section className="Duo Counter">
+          <p>Value dari firstCounter adalah: {duoCounter.firstCounter}</p>
+          <p>Value dari secondCounter adalah: {duoCounter.secondCounter}</p>
 
-        <div style={{ marginBottom: "1em" }}>
-          {/* TODO: duoCounter - Tambah firstCounter (2) */}
-          {/* Tambahkan kode di sini untuk menambahkan firstCounter */}
-          <button onClick={buttonFirstIncrementOnClickHandler}>
-            Tambah (firstCounter)
-          </button>
-        </div>
+          <div style={{ marginBottom: "1em" }}>
+            {/* TODO: duoCounter - Tambah firstCounter (2) */}
+            {/* Tambahkan kode di sini untuk menambahkan firstCounter */}
+            <button onClick={buttonFirstIncrementOnClickHandler}>
+              Tambah (firstCounter)
+            </button>
+          </div>
 
-        <div>
-          {/* TODO: duoCounter - Tambah secondCounter (4) */}
-          {/* Tambahkan kode di sini untuk menambahkan secondCounter */}
-          {/* Tidak ada yang berbeda dengan versi javascript */}
-          <input
-            style={{ marginRight: "1em" }}
-            type="number"
-            placeholder="Amount"
-            value={amount}
-            onChange={inputAmountOnChangeHandler}
-          />
+          <div>
+            {/* TODO: duoCounter - Tambah secondCounter (4) */}
+            {/* Tambahkan kode di sini untuk menambahkan secondCounter */}
+            {/* Tidak ada yang berbeda dengan versi javascript */}
+            <input
+              style={{ marginRight: "1em" }}
+              type="number"
+              placeholder="Amount"
+              value={amount}
+              onChange={inputAmountOnChangeHandler}
+            />
 
-          {/* TODO: duoCounter - Tambah secondCounter (5) */}
-          {/* Tambahkan kode di sini untuk menambahkan secondCounter */}
-          {/* Tidak ada yang berbeda dengan versi javascript */}
-          <button onClick={buttonSecondIncrementOnClickHandler}>
-            Tambah (secondCounter)
-          </button>
-        </div>
-      </section>
+            {/* TODO: duoCounter - Tambah secondCounter (5) */}
+            {/* Tambahkan kode di sini untuk menambahkan secondCounter */}
+            {/* Tidak ada yang berbeda dengan versi javascript */}
+            <button onClick={buttonSecondIncrementOnClickHandler}>
+              Tambah (secondCounter)
+            </button>
+          </div>
+        </section>
+      )}
+
+      {/* TODO: PseudoRouter - menggunakan Enum (4) */}
+      {/* Tambahkan kode di sini untuk menggunakan enum */}
+      {currentPage === PageName.FORM_PAGE && <FormPage />}
+      {currentPage === PageName.TABLE_PAGE && <TablePage />}
     </>
   );
 };

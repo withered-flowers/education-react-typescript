@@ -9,6 +9,7 @@
 - [Starting React with TypeScript](#starting-react-with-typescript)
   - [Langkah 1 - Inisialisasi Project](#langkah-1---inisialisasi-project)
   - [Langkah 2 - Duo Counter](#langkah-2---duo-counter)
+  - [Langkah 3 - Pseudo Router](#langkah-3---pseudo-router)
 
 ## Disclaimer & Prerequisites
 
@@ -520,4 +521,345 @@ Langkah-langkah untuk membuat bagian ini adalah sebagai berikut:
    };
 
    export default App;
+   ```
+
+## Langkah 3 - Pseudo Router
+
+Pada langkah ini kita akan mencoba untuk membuat "Navigasi" secara manual, tanpa menggunakan routing, yang bisa mengarahkan pada 3 halaman:
+
+- Halaman Counter
+- Halaman Form
+- Halaman Table
+
+Halaman Counter merupakan Halaman yang kita buat pada langkah sebelumnya yang menempel pada halaman `App.tsx`
+
+Halaman Form dan Halaman Table, adalah halaman dalam bentuk 2 buah Component baru dengan nama `FormPage.tsx` dan `TablePage.tsx` yang hanya akan menampilkan tulisan `Ini adalah halaman Form` dan `Ini adalah halaman Table`
+
+"Navigasi" ini akan dibuat dalam bentuk sebuah `Navigation Bar`, dalam sebuah Component yang bernama `NavBar.tsx`
+
+Requirementnya adalah:
+
+- State untuk menampung `current page` ada pada `App.tsx`
+- Pengubah Statenya terdapat di dalam `NavBar.tsx`
+
+Berikut adalah langkah langkahnya:
+
+1. Buat dua buah file baru dengan nama `/src/pages/FormPage.tsx` dan `/src/pages/TablePage.tsx`, kemudian isilah keduanya dengan kode sebagai berikut:
+
+   ```ts
+   // File: /src/pages/FormPage.tsx
+   const FormPage = () => {
+     return (
+       <>
+         <p>Ini adalah halaman Form</p>
+       </>
+     );
+   };
+
+   export default FormPage;
+   ```
+
+   ```ts
+   // File: /src/pages/TablePage.tsx
+   const TablePage = () => {
+     return (
+       <>
+         <p>Ini adalah halaman Table</p>
+       </>
+     );
+   };
+
+   export default TablePage;
+   ```
+
+1. Selanjutnya kita akan membuat halaman dasar untuk Navigation Barnya, adapun kode yang harus dituliskan pada file `/src/components/NavBar.tsx` adalah sebagai berikut:
+
+   ```ts
+   // File: /src/components/NavBar.tsx
+   const NavBar = () => {
+     return (
+       <>
+         <nav>
+           <ul
+             style={{
+               display: "flex",
+               flexDirection: "row",
+               gap: "1em",
+               listStyle: "none",
+               paddingLeft: "0",
+             }}
+           >
+             <li>
+               <a href="#">Counter</a>
+             </li>
+             <li>
+               <a href="#">Form</a>
+             </li>
+             <li>
+               <a href="#">Table</a>
+             </li>
+           </ul>
+         </nav>
+       </>
+     );
+   };
+
+   export default NavBar;
+   ```
+
+1. Lalu kita akan memanggil `NavBar.tsx` pada `App.tsx`. Dengan asumsi bahwa teman-teman sudah mengerti React maka kode yang harus dituliskan hanyalah beberapa baris ini saja:
+
+   ```ts
+   // File: App.tsx
+   // TODO: PseudoRouter - tambah NavBar (1)
+   import NavBar from "./components/NavBar";
+   import FormPage from "./pages/FormPage";
+   import TablePage from "./pages/TablePage";
+
+   // sama dengan sebelumnya
+   const App = () => {
+     // sama dengan sebelumnya
+
+     return (
+       <>
+         {/* TODO: PseudoRouter - tambah NavBar (2) */}
+         <NavBar />
+
+         {/* Selebihnya sama dengan sebelumnya */}
+
+         {/* Panggil 2 Page ini sebelum tutup Fragment */}
+         <FormPage />
+         <TablePage />
+       </>
+     );
+   };
+   ```
+
+1. Selanjutnya kita akan membuat "constant" yang akan menahan beberapa "nama" dari halaman yang ada. Kita membutuhkan "constant" ini karena kita akan menggunakannya nanti pada beberapa tempat (`App.tsx` dan `NavBar.tsx`).
+
+   Nama Halaman yang akan kita gunakan adalah:
+
+   - `COUNTER_PAGE` untuk halaman **Counter**
+   - `FORM_PAGE` untuk halaman **Form**
+   - `TABLE_PAGE` untuk halaman **Table**
+
+1. Untuk itu kita akan membuat sebuah file untuk menahan "constant" tersebut dengan nama `/src/config/constant.ts`, pada TypeScript kita bisa menahan "constant" dengan menggunakan `enum(erations)` (https://www.typescriptlang.org/docs/handbook/enums.html). Kodenya adalah sebagai berikut:
+
+   ```ts
+   // File: /src/config/contsant.ts
+   // Pada file ini kita langsung export saja tanpa menggunakan default
+   export enum PageName {
+     // Secara default apabila tidak menggunakan nama alias pada enum
+     // adalah akses by value index
+
+     COUNTER_PAGE, // valuenya adalah 0
+     FORM_PAGE, // valuenya adalah 1
+     TABLE_PAGE, // valuenya adalah 2
+
+     // Namun karena kita menggunakan enum, kita tidak mempedulikan valuenya
+     // Kita akan mempedulikan "nama alias"-nya !
+   }
+   ```
+
+1. Selanjutnya kita akan mencoba untuk menggunakan `enum` ini pada `App.tsx`. Adapun modifikasi kodenya adalah sebagai berikut:
+
+   ```ts
+   // Tambahkan di import terbawah
+   // TODO: PseudoRouter - menggunakan Enum (1)
+   // Tambahkan kode di sini untuk menggunakan enum
+   import { PageName } from "./config/constant";
+
+   // -- sama seperti sebelumnya --
+   const App = () => {
+     // Tambahkan sebelum return
+
+     // TODO: PseudoRouter - menggunakan Enum (2)
+     // Tambahkan kode di sini untuk menggunakan enum
+     // Perhatikan di sini useState-nya menggunakan tipe data enum yang dibuat (PageName)
+     const [currentPage, setCurrentPage] = useState<PageName>(
+       // Set default valuenya mengarah pada halaman Counter
+       PageName.COUNTER_PAGE
+     );
+
+     return (
+       <>
+         {/* Sama seperti sebelumnya */}
+
+         {/* Pada bagian section Duo Counter kita akan menambahkan */}
+         {/* Conditional Rendering */}
+
+         {/* TODO: PseudoRouter - menggunakan Enum (3) */}
+         {/* Tambahkan kode di sini untuk menggunakan enum */}
+         {/* Di sini menggunakan normal conditional rendering */}
+         {/* Hanya saja kondisinya menggunakan enum ! */}
+         {currentPage === PageName.COUNTER_PAGE && (
+           <section className="Duo Counter">...</section>
+         )}
+
+         {/* TODO: PseudoRouter - menggunakan Enum (4) */}
+         {/* Tambahkan kode di sini untuk menggunakan enum */}
+         {currentPage === PageName.FORM_PAGE && <FormPage />}
+         {currentPage === PageName.TABLE_PAGE && <TablePage />}
+       </>
+     );
+   };
+   ```
+
+1. Selanjutnya kita akan melempar (`passing`) fungsi `setCurrentPage` ini ke component `NavBar.tsx` agar dapat digunakan langsung oleh component.
+
+   Apabila kita menggunakan JavaScript biasa, maka mungkin caranya adalah seperti ini:
+
+   ```js
+   // File: App.tsx
+
+   const App = () => {
+     return (
+       <>
+         <NavBar fnHandler={setCurrentPage} />
+       </>
+     );
+   };
+   ```
+
+   ```js
+   // File: /src/components/NavBar.tsx
+
+   const NavBar = ({ fnHandler }) => {
+     return <>...</>;
+   };
+   ```
+
+   Namun, pada saat kita menggunakan TypeScript, kode di atas akan menerima error: `Type blablabla is not assignable to type 'IntrinsicAttributes'`.
+
+   Hal ini terjadi karena `props` di dalam di-dalam component `NavBar.tsx` harus didefinisikan terlebih dahulu dalam sebuah `interface` di dalam **TypeScript**.
+
+   Loh, padahal kan `fnHandler` isinya adalah suatu `setState` dari `useState`, jadi nanti isinya apa yah ???
+
+   Dokumentasi:
+
+   - https://www.typescriptlang.org/docs/handbook/jsx.html
+
+1. Selanjutnya kita akan membuat props ini menjadi bisa berjalan dalam versi React TS nya yah ! Adapun kode yang harus dimodifikasi adalah sebagai berikut:
+
+   ```ts
+   // File: App.tsx
+
+   // --sama seperti sebelumnya--
+
+   const App = () => {
+     // --sama seperti sebelumnya--
+     return (
+       <>
+         {/* TODO: PseudoRouter - tambah fnHandler(1) */}
+         <NavBar fnHandler={setCurrentPage} />
+
+         {/* --sama seperti sebelumnya-- */}
+       </>
+     );
+   };
+   ```
+
+   Yang berbeda cukup signifikan adalah pada halaman `NavBar.tsx` nya, yaitu menjadi sebagai berikut:
+
+   ```ts
+   // File: /src/components/NavBar.tsx
+
+   // TODO: PseudoRouter - tambah fnHandler (2)
+   import { SyntheticEvent } from "react";
+   import { PageName } from "../config/constant";
+
+   // TODO: PseudoRouter - tambah fnHandler (3)
+   // Umumnya dibuat dengan menggunakan suatu interface
+   interface Props {
+     // Sebenarnya apabila ingin sangat detil
+     // bisa menggunakan Dispatch type dari React TS
+
+     // Namun bisa kita simplifikasi
+     // dengan mendefinisikan bahwa fnHandler
+     // adalah sebuah fungsi yang tidak akan return apapun
+
+     // Ingat bahwa fnHandler ini sebenarnya adalah
+     // setCurrentPage, yang membutuhkan parameter berupa type PageName
+
+     // Pada line ini artinya adalah
+     // - interface Props memiliki sebuah object dengan nama fnHandler
+     // - yang berupa suatu fungsi yang tidak mengembalikan apapun
+     // - menerima suatu parameter dengan nama pageName, yang bertipe PageName
+     fnHandler: (pageName: PageName) => void;
+   }
+
+   // TODO: PseudoRouter - tambah fnHandler (4)
+   // Selanjutnya untuk Props yang ada di NavBar ini
+   // Akan menggunakan interface Props yang sudah didefinisikan di atas
+   const NavBar = ({ fnHandler }: Props) => {
+     // TODO: PseudoRouter - tambah fnHandler (5)
+     // Di sini kita akan membuat sebuah fungsi yang memudahkan kita untuk memanggil fnHandler
+     // Ingat juga bahwa karena ini adalah anchor, kita harus preventDefault agar tidak terjadi
+     // refresh halaman
+
+     // Loh eventnya kok berbeda dengan yang sebelumnya?
+     // Ya, karena ini adalah React, dan memiliki banyak tipe Event, sehingga
+     // Kita pun harus menyesuaikan event yang dimiliki !
+
+     // Untuk anchorOnClick ini karena kita hanya ingin menggunakan preventDefault saja
+     // Maka kita bisa menggunakan SyntheticEvent
+
+     // https://reactjs.org/docs/events.html
+     const anchorOnClickHandler = (
+       event: SyntheticEvent,
+       pageName: PageName
+     ) => {
+       event.preventDefault();
+       fnHandler(pageName);
+     };
+
+     return (
+       <>
+         <nav>
+           <ul
+             style={{
+               display: "flex",
+               flexDirection: "row",
+               gap: "1em",
+               listStyle: "none",
+               paddingLeft: "0",
+             }}
+           >
+             <li>
+               {/* TODO: PseudoRouter - tambah fnHandler (6a) */}
+               {/* Gunakan fungsi anchorOnClickHandler di sini */}
+               <a
+                 href="#"
+                 onClick={(e) => anchorOnClickHandler(e, PageName.COUNTER_PAGE)}
+               >
+                 Counter
+               </a>
+             </li>
+             <li>
+               {/* TODO: PseudoRouter - tambah fnHandler (6b) */}
+               {/* Gunakan fungsi anchorOnClickHandler di sini */}
+               <a
+                 href="#"
+                 onClick={(e) => anchorOnClickHandler(e, PageName.FORM_PAGE)}
+               >
+                 Form
+               </a>
+             </li>
+             <li>
+               {/* TODO: PseudoRouter - tambah fnHandler (6c) */}
+               {/* Gunakan fungsi anchorOnClickHandler di sini */}
+               <a
+                 href="#"
+                 onClick={(e) => anchorOnClickHandler(e, PageName.TABLE_PAGE)}
+               >
+                 Table
+               </a>
+             </li>
+           </ul>
+         </nav>
+       </>
+     );
+   };
+
+   export default NavBar;
    ```
