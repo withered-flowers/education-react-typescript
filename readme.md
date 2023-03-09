@@ -863,3 +863,7 @@ Berikut adalah langkah langkahnya:
 
    export default NavBar;
    ```
+
+Sampai pada tahap ini artinya kita sudah selesai membuat `Pseudo Router` yang digunakan dalam aplikasi React versi TS ini.
+
+Selanjutnya kita akan membuat Halaman `FormPage` nya agar dapat berjalan dengan baik !
