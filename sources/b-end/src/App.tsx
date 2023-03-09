@@ -102,7 +102,8 @@ const App = () => {
   return (
     <>
       {/* TODO: PseudoRouter - tambah NavBar (2) */}
-      <NavBar />
+      {/* TODO: PseudoRouter - tambah fnHandler (1) */}
+      <NavBar fnHandler={setCurrentPage} />
       {/* TODO: PseudoRouter - menggunakan Enum (3) */}
       {/* Tambahkan kode di sini untuk menggunakan enum */}
       {/* Di sini menggunakan normal conditional rendering */}
