@@ -10,6 +10,7 @@
   - [Langkah 1 - Inisialisasi Project](#langkah-1---inisialisasi-project)
   - [Langkah 2 - Duo Counter](#langkah-2---duo-counter)
   - [Langkah 3 - Pseudo Router](#langkah-3---pseudo-router)
+  - [Langkah 4 - Form Page](#langkah-4---form-page)
 
 ## Disclaimer & Prerequisites
 
@@ -867,3 +868,149 @@ Berikut adalah langkah langkahnya:
 Sampai pada tahap ini artinya kita sudah selesai membuat `Pseudo Router` yang digunakan dalam aplikasi React versi TS ini.
 
 Selanjutnya kita akan membuat Halaman `FormPage` nya agar dapat berjalan dengan baik !
+
+## Langkah 4 - Form Page
+
+Pada langkah ini kita akan membuat sebuah Form pada page `FormPage.tsx`, yang memiliki dua buah input, yaitu `username` dan `password`. Pada saat Form ini di-`submit`, maka aplikasi akan mengecek, apakah `username` dan `password` yang di-input sudah tepat atau belum, kemudian akan memberikan respon, apabila berhasil maka akan memberikan info `Login Berhasil, silahkan cek Local Storage`, apabila gagal, maka akan memberikan info `Login Gagal`
+
+Requirement:
+
+- Asumsikan bahwa `username` dan `password` yang tepat adalah `belajar` sebagai `username` dan `react-ts` sebagai `password
+- Aplikasi ini tidak melakukan `fetch` / penembakan ke backend terlebih dahulu yah, karena fokus kita adalah di React-nya !
+
+Langkah-langkah untuk mengerjakannya adalah sebagai berikut:
+
+1. Modifikasi tampilan `/src/pages/FormPage.tsx` untuk menggunakan layout sebagai berikut:
+
+   ```ts
+   const FormPage = () => {
+     return (
+       <>
+         <p>Ini adalah halaman Form</p>
+
+         {/* TODO: formPage - Layouting (1) */}
+         <form
+           style={{
+             display: "flex",
+             flexDirection: "column",
+             gap: "1em",
+             width: "50vw",
+           }}
+         >
+           <input type="text" name="username" placeholder="Username" />
+           <input type="password" name="password" placeholder="Password" />
+           <button type="submit">Lakukan Login</button>
+         </form>
+
+         <p style={{ color: "#008744" }}>
+           Login Berhasil, silahkan cek Local Storage
+         </p>
+
+         <p style={{ color: "#D62D20" }}>Login Gagal</p>
+       </>
+     );
+   };
+
+   export default FormPage;
+   ```
+
+1. Selanjutnya kita akan mencoba untuk membuat logic untuk form submission-nya tanpa menggunakan useState untuk masing masing input yah !
+
+   (Namun kita tetap membutuhkan tambahan state untuk menyatakan apakah ada Error atau tidak)
+
+   ```ts
+   import { FormEvent, useState } from "react";
+
+   // TODO: formPage - Form Handling (1)
+   // Pada bagian ini kita akan deklarasi type dari state yang ada pada form
+   type FormState = {
+     isError: boolean;
+     isSuccess: boolean;
+   };
+
+   const FormPage = () => {
+     // TODO: formPage - Form Handling (2)
+     // Pada bagian ini kita akan deklarasi state yang ada pada form
+     const [formState, setFormState] = useState<FormState>({
+       isError: false,
+       isSuccess: false,
+     });
+
+     // TODO: formPage - Form Handling (3)
+     // Pada bagian ini kita akan mencoba untuk membuat form submission handler
+     const formOnSubmitHandler = (event: FormEvent<HTMLFormElement>) => {
+       event.preventDefault();
+
+       localStorage.clear();
+
+       // Ini menggunakan Uncontrolled components di dalam suatu form
+       // https://react-typescript-cheatsheet.netlify.app/docs/basic/getting-started/forms_and_events/
+       const target = event.target as typeof event.target & {
+         username: { value: string };
+         password: { value: string };
+       };
+
+       // Sebenarnya cara terbaiknya tetap ada state yang dikhususkan untuk masing masing input
+       const username = target.username.value;
+       const password = target.password.value;
+
+       if (username === "belajar" && password === "react-ts") {
+         setFormState({
+           isError: false,
+           isSuccess: true,
+         });
+
+         localStorage.setItem("login", btoa(username + password));
+       } else {
+         setFormState({
+           isSuccess: false,
+           isError: true,
+         });
+       }
+     };
+
+     return (
+       <>
+         <p>Ini adalah halaman Form</p>
+
+         {/* TODO: formPage - Layouting (1) */}
+         <form
+           // TODO: formPage - Form Handling (4)
+           // Pada bagian ini kita menambahkan onSubmit pada form
+           onSubmit={formOnSubmitHandler}
+           style={{
+             display: "flex",
+             flexDirection: "column",
+             gap: "1em",
+             width: "50vw",
+           }}
+         >
+           <input type="text" name="username" placeholder="Username" />
+           <input type="password" name="password" placeholder="Password" />
+           <button type="submit">Lakukan Login</button>
+         </form>
+
+         {/* TODO: formPage - Form Handling (3) */}
+         {/* Handle untuk logic Form Success */}
+         {formState.isSuccess && (
+           <p style={{ color: "#008744" }}>
+             Login Berhasil, silahkan cek Local Storage
+           </p>
+         )}
+
+         {/* TODO: formPage - Form Handling (4) */}
+         {/* Handle untuk logic Form Error */}
+         {formState.isError && <p style={{ color: "#D62D20" }}>Login Gagal</p>}
+       </>
+     );
+   };
+
+   export default FormPage;
+   ```
+
+   Pada bagian ini terlihat perbedaan antara TS dengan JSnya umumnya adalah sebagai berikut:
+
+   - Memiliki type untuk state dari Form (`FormState`)
+   - pada saat menggunakan useState memasukkan type `FormState`
+   - Pada saat form submission, tipe data untuk event adalah `FormEvent<HTMLFormElement>`
+   - Untuk `target`-nya masing masing harus menggunakan gabungan type dari `event.target` dan Object untuk inputan punya value masing masing `{ name1: { value : string }, ... }`
