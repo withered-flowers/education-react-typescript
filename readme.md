@@ -948,6 +948,8 @@ Langkah-langkah untuk mengerjakannya adalah sebagai berikut:
        const target = event.target as typeof event.target & {
          username: { value: string };
          password: { value: string };
+         // ceritanya di sini kita ingin menggunakan event.target.reset() pada form
+         reset: () => void;
        };
 
        // Sebenarnya cara terbaiknya tetap ada state yang dikhususkan untuk masing masing input
@@ -967,6 +969,8 @@ Langkah-langkah untuk mengerjakannya adalah sebagai berikut:
            isError: true,
          });
        }
+
+       target.reset();
      };
 
      return (
