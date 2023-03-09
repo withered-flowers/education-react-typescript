@@ -1018,3 +1018,5 @@ Langkah-langkah untuk mengerjakannya adalah sebagai berikut:
    - pada saat menggunakan useState memasukkan type `FormState`
    - Pada saat form submission, tipe data untuk event adalah `FormEvent<HTMLFormElement>`
    - Untuk `target`-nya masing masing harus menggunakan gabungan type dari `event.target` dan Object untuk inputan punya value masing masing `{ name1: { value : string }, ... }`
+
+Selanjutnya kita akan membuat sebuah tabel yang akan mencomot data dari luar. Data yang akan diambil adalah dari `https://jsonplaceholder.typicode.com/comments`.
